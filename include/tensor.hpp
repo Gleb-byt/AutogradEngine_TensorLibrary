@@ -5,19 +5,32 @@
 #include <numeric>
 #include <iostream>
 
+
+class BackwardFunction;
+
 class Tensor {
 private:
 
-    std::shared_ptr<std::vector<float>> data_;
-        
     std::vector<int> strides_;
+
+    std::shared_ptr<std::vector<float>> data_;
     
 public:
+    bool requires_grad_ = false;
+
+    std::shared_ptr<Tensor> grad_ = nullptr;
+
+    std::shared_ptr<BackwardFunction> grad_fn_ = nullptr;
+
     std::vector<int> shape_;
 
     Tensor(const std::vector<int>& shape);
 
     Tensor(const std::vector<float>& data, const std::vector<int>& shape);
+
+    Tensor(const std::vector<int>& shape, bool requires_grad);
+
+    void zero_grad();
 
     int size() const;
 
