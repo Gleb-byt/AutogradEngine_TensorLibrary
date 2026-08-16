@@ -1,4 +1,6 @@
 #include "../include/tensor.hpp"
+#include "../include/autograd.hpp"
+
 
 Tensor::Tensor(const std::vector<int>&shape) : shape_(shape) {
     int total_size = 1;
@@ -115,3 +117,35 @@ void Tensor::print() const {
     std::cout << ")" << std::endl;
 }
 
+
+
+Tensor Tensor::operator*(const float& val) const {
+    Tensor result_(shape_);
+    for (int i {}; i < size(); ++i) {
+        result_[i] = (*data_)[i] * val;
+    }
+    return result_;
+}
+
+Tensor Tensor::operator+(const float& val) const {
+    Tensor result_(shape_);
+    for  (int i {}; i < size(); ++ i) {
+        result_[i] = (*data_)[i] + val;
+    }
+    return result_;
+}
+
+
+Tensor Tensor::transpose() const {
+    if (shape_.size() != 2) {
+        throw std::invalid_argument("Only 2D tensors could be transposed");
+    } 
+    Tensor result_({shape_[1], shape_[0]});
+    for (int i {}; i < shape_[0]; ++i) {
+        for (int j {}; j < shape_[1]; ++i) {
+            result_[j * result_.strides_[0] + i * result_.strides_[1]] = (*data_)[i* strides_[0] + j * strides_[1]];
+        }
+    }
+    return result_;
+
+}

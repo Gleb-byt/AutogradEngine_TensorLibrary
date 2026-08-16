@@ -49,6 +49,13 @@ public:
 
     Tensor matmul(const Tensor&other) const;
 
+    Tensor operator+(const float& val) const;
+
+    Tensor operator*(const float& val) const;
+
+    Tensor transpose() const;
+
+
     void print() const;
 
 

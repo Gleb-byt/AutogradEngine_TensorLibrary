@@ -62,7 +62,7 @@ public:
         std::shared_ptr<Tensor> out_grad_) {
             this->a_ = a_;
             this->b_ = b_;
-            this->out_grad_ = out_grad_;
+            this->out_grad_ = out_grad_->grad_;
         }
 
     void apply() override {
@@ -84,4 +84,17 @@ public:
         }
     }
 
+};
+
+class MatMulBackward : public BackwardFunction {
+
+private:
+    std::shared_ptr<Tensor> a_;
+    std::shared_ptr<Tensor> b_;
+    std::shared_ptr<Tensor> out_grad_;
+
+
+public:
+    MatMulBackward(std::shared_ptr<Tensor> a_, std::shared_ptr<Tensor> b_, std::shared_ptr<Tensor> out_grad_);
+    void apply() override;
 };
