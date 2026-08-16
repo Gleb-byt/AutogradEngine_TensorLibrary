@@ -70,7 +70,7 @@ Tensor Tensor::operator*(const Tensor& other) const {
 
 Tensor Tensor::operator/(const Tensor& other) const {
     if (shape_ != other.shape_) {
-        throw std::invalid_argument("Shapes must match for multiplication");
+        throw std::invalid_argument("Shapes must match for devision");
     }
     float eps = 1e-6;
     Tensor result(shape_);
@@ -82,30 +82,81 @@ Tensor Tensor::operator/(const Tensor& other) const {
 }
 
 Tensor Tensor::matmul(const Tensor& other) const {
-    if (shape_.size() != 2 || other.shape_.size() != 2) {
-        throw std::invalid_argument("Matmul requires 2D tensors");
-    }
-    if (shape_[1] != other.shape_[0]) {
-        throw std::invalid_argument("Inner dimensions must match for matmul");
+    if (shape_.size() == 1 && other.shape_.size() == 1) {
+
+        return this->dot(other);
     }
 
-    int M = shape_[0];
-    int K = shape_[1];
-    int N = other.shape_[1];
+    if (shape_.size() == 1 && other.shape_.size() == 2) {
 
-    Tensor result({M,N});
+        int K = shape_[0];
 
-    for (int i {}; i < M; ++i) {
-        for (int j {}; j < N; ++j) {
-            float res = 0.0f;
-            for (int k {}; k < K; ++k) {
-                res += (*data_)[i * strides_[0] + k * strides_[1]] *
-                    (*other.data_)[k * other.strides_[0] + j * other.strides_[1]];
-            }
-            result[i * result.strides_[0] + j * result.strides_[1]] = res;
+        if (K != other.shape_[0]) {
+            throw std::invalid_argument("Inner Dimensions must match for 1D and 2D matmul");
         }
+
+        int N = other.shape_[1];
+
+        Tensor result({N});
+
+        for (int i {}; i < N; ++i) {
+            int sum {};
+            for (int j {}; j < K; ++j) {
+                sum += (*this->data_)[i] * (*other.data_)[i * other.strides_[0] + j * other.strides_[1]];
+            }
+            (*result.data_)[i] = sum;
+        }
+        return result;
+
     }
-    return result;
+
+    if (shape_.size() == 2 && other.shape_.size() == 1) {
+        int K = shape_[1];
+
+        if (K != other.shape_[0]) {
+            throw std::invalid_argument("Inner Dimensions must match for 2D and 1D matmul");
+        }
+
+        int N = other.shape_[1];
+
+        Tensor result({N});
+
+        for (int i {}; i < N; ++i) {
+            int sum {};
+            for (int j {}; j < K; ++j) {
+                sum += (*this->data_)[i * this->strides_[0] + j * this->strides_[1]] * (*other.data_)[i + other.strides_[0]];
+            }
+            result[i] = sum;
+        }
+        return result;
+    }
+
+    if (shape_.size() == 2 && shape_.size() == 2) {
+
+        int M = shape_[0];
+        int K = shape_[1];
+        int N = other.shape_[1];
+
+
+        if (K != other.shape_[0]) {
+            throw std::invalid_argument("Inner dimensions must match for 2D and 2D matmul");
+        }
+
+        Tensor result({M,N});
+
+        for (int i {}; i < M; ++i) {
+            for (int j {}; j < N; ++j) {
+                float res = 0.0f;
+                for (int k {}; k < K; ++k) {
+                    res += (*data_)[i * strides_[0] + k * strides_[1]] *
+                        (*other.data_)[k * other.strides_[0] + j * other.strides_[1]];
+                }
+                result[i * result.strides_[0] + j * result.strides_[1]] = res;
+            }
+        }
+        return result;
+
+    }
 
 }
 
@@ -142,10 +193,31 @@ Tensor Tensor::transpose() const {
     } 
     Tensor result_({shape_[1], shape_[0]});
     for (int i {}; i < shape_[0]; ++i) {
-        for (int j {}; j < shape_[1]; ++i) {
+        for (int j {}; j < shape_[1]; ++j) {
             result_[j * result_.strides_[0] + i * result_.strides_[1]] = (*data_)[i* strides_[0] + j * strides_[1]];
         }
     }
     return result_;
 
+}
+
+
+Tensor Tensor::dot(const Tensor& other) const {
+    if (shape_.size() != 1 || other.shape_.size() != 1) {
+        throw std::invalid_argument("This operation is allowed only for 1D Tensors");
+    }
+
+    if (shape_[0] != other.shape_[0]) {
+        throw std::invalid_argument("Tensors should have the same length");
+    }
+
+    float sum = 0.0f;
+    for (int i {}; i < size(); ++i) {
+        sum += (*data_)[i] * (*other.data_)[i];
+    }
+
+    Tensor result({1});
+
+    result[0] = sum;
+    return result;
 }
