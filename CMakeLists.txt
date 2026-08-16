@@ -11,7 +11,7 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 add_library(autograd_lib 
     src/tensor.cpp
-    # src/autograd.cpp 
+    src/autograd.cpp 
 )
 target_include_directories(autograd_lib PUBLIC include)
 enable_testing()

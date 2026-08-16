@@ -8,6 +8,8 @@ public:
     virtual ~BackwardFunction() = default;
     
     virtual void apply() = 0;
+
+    virtual std::vector<std::shared_ptr<Tensor>> get_parents() const = 0;
 };
 
 class AddBackward : public BackwardFunction {
@@ -47,6 +49,10 @@ public:
         }
 
     }
+
+    std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+        return {a_, b_};
+    }
 };
 
 class MulBackward : public BackwardFunction {
@@ -84,6 +90,10 @@ public:
         }
     }
 
+    std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+        return {a_, b_};
+    }
+
 };
 
 class MatMulBackward : public BackwardFunction {
@@ -97,4 +107,12 @@ private:
 public:
     MatMulBackward(std::shared_ptr<Tensor> a_, std::shared_ptr<Tensor> b_, std::shared_ptr<Tensor> out_grad_);
     void apply() override;
+    std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+        return {a_, b_};
+    }
 };
+
+
+std::shared_ptr<Tensor> add(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor> b);
+std::shared_ptr<Tensor> mul(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor> b);
+std::shared_ptr<Tensor> matmul(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor> b);
