@@ -12,6 +12,8 @@ FetchContent_MakeAvailable(googletest)
 add_library(autograd_lib 
     src/tensor.cpp
     src/autograd.cpp 
+    include/tensor.hpp
+    include/autograd.hpp
 )
 target_include_directories(autograd_lib PUBLIC include)
 enable_testing()
