@@ -12,6 +12,8 @@ TEST(TensorTest,Addition) {
     EXPECT_FLOAT_EQ(c[3], 12.0f);
 }
 
+
+
 TEST(TensorTest, Matmul) {
     Tensor a({1,2,3,4}, {2,2});
     Tensor b({5,6,7,8}, {2,2});
