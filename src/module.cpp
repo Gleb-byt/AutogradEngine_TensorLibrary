@@ -11,7 +11,7 @@ std::shared_ptr<Tensor> Module::forward(std::shared_ptr<Tensor> input) {
     throw std::runtime_error("Forward not implemented");
 }
 
-std::shared_ptr<Tensor> Module::operator()(std::shared_ptr<Tensor> input) { return forward(input) };
+std::shared_ptr<Tensor> Module::operator()(std::shared_ptr<Tensor> input) { return forward(input); }
 
 
 void Module::register_parameter(std::string name, std::shared_ptr<Tensor> param) {

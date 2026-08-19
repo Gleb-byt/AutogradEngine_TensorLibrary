@@ -198,3 +198,41 @@ void Tensor::zero_grad() {
         }
     }
 }
+
+
+FlattenBackward::FlattenBackward(std::shared_ptr<Tensor> input, std::shared_ptr<Tensor> output) {
+    this->input_ = input;
+    this->out_ = output;
+}
+
+void FlattenBackward::apply() {
+    if (input_->requires_grad_) {
+        if (!input_->grad_) {
+            input_->grad_ = std::make_shared<Tensor> (input_->shape_);
+        }
+
+        for (int i {}; i < input_->size(); ++i) {
+            (*input_->grad_)[i] = (*out_->grad_)[i];
+        }
+    }
+
+}
+
+ReluBackward::ReluBackward(std::shared_ptr<Tensor> input, std::shared_ptr<Tensor> output) {
+    this->input_ = input;
+    this->out_ = output;
+}
+
+void ReluBackward::apply() {
+    if (input_->requires_grad_) {
+        if (!input_->grad_) {
+            (*input_).grad_ = std::make_shared<Tensor> (input_->shape_);
+        }
+
+        for (int i {}; i < input_->size(); ++i) {
+            if ((*input_)[i] > 0.0f) {
+                (*(*input_).grad_)[i] += (*out_->grad_)[i];
+            }
+        }
+    }
+}
