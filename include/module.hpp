@@ -14,6 +14,7 @@ private:
 
 public:
     virtual std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input);
+    
     std::shared_ptr<Tensor> operator()(std::shared_ptr<Tensor> input);
 
     void register_parameter(std::string name, std::shared_ptr<Tensor> param);

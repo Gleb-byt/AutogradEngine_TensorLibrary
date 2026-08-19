@@ -112,6 +112,35 @@ public:
     }
 };
 
+class FlattenBackward : public BackwardFunction {
+private:
+    std::shared_ptr<Tensor> input_;
+    std::shared_ptr<Tensor> out_;
+
+public:
+    FlattenBackward(std::shared_ptr<Tensor> input, std::shared_ptr<Tensor> output);
+    void apply() override;
+    std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+        return {input_};
+    }
+
+};
+
+class ReluBackward : public BackwardFunction {
+private:
+    std::shared_ptr<Tensor> input_;
+    std::shared_ptr<Tensor> out_;
+
+public:
+    ReluBackward(std::shared_ptr<Tensor> input, std::shared_ptr<Tensor> output);
+    void apply() override;
+    std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+        return {input_};
+    }
+};
+
+
+
 
 std::shared_ptr<Tensor> add(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor> b);
 std::shared_ptr<Tensor> mul(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor> b);

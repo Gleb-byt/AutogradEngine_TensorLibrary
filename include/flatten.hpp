@@ -5,5 +5,5 @@
 
 class Flatten : public Module {
 public:
-    std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input) override;
+    std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input) override; 
 };
