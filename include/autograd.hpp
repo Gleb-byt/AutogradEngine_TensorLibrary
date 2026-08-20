@@ -140,6 +140,43 @@ public:
 };
 
 
+class MSEBackward : public BackwardFunction {
+private:
+    std::shared_ptr<Tensor> pred_;
+    std::shared_ptr<Tensor> target_;
+    std::shared_ptr<Tensor> out_;
+
+public:
+    MSEBackward(std::shared_ptr<Tensor> pred, 
+        std::shared_ptr<Tensor> target, 
+        std::shared_ptr<Tensor> out);
+
+    void apply() override;
+
+    std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+        return { pred_ };
+    }
+};
+
+class CrossEntropyBackward : public BackwardFunction {
+private:
+    std::shared_ptr<Tensor> pred_;
+    std::shared_ptr<Tensor> target_;
+    std::shared_ptr<Tensor> out_;
+    std::vector<float> softmax_cache_;
+
+public:
+    CrossEntropyBackward(std::shared_ptr<Tensor> pred,
+        std::shared_ptr<Tensor> target,
+        std::shared_ptr<Tensor> out,
+        std::vector<float> softmax_cache_);
+    
+        void apply() override;
+
+        std::vector<std::shared_ptr<Tensor>> get_parents() const override {
+            return {pred_};
+        }
+};
 
 
 std::shared_ptr<Tensor> add(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor> b);
