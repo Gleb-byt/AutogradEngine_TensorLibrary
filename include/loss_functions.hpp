@@ -6,12 +6,12 @@
 
 class MSELoss : public Module {
 public:
-    std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> pred, std::shared_ptr<Tensor> target);
+    std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> pred, std::shared_ptr<Tensor> target) override;
 }
 ;
 
 class CrossEntropyLoss : public Module {
 public:
-    std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> pred, std::shared_ptr<Tensor> target);
+    std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> pred, std::shared_ptr<Tensor> target) override;
 };
 

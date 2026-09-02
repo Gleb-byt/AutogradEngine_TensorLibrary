@@ -236,3 +236,77 @@ void ReluBackward::apply() {
         }
     }
 }
+
+MSEBackward::MSEBackward(std::shared_ptr<Tensor> pred, 
+    std::shared_ptr<Tensor> target,
+    std::shared_ptr<Tensor> out) {
+        this->pred_ = pred;
+        this->target_ = target;
+        this->out_ = out;
+    }
+
+
+void MSEBackward::apply() {
+    if (pred_->requires_grad_) {
+        if (!pred_-> grad_) {
+            pred_->grad_ = std::make_shared<Tensor> (pred_->shape_);
+        }
+
+        int grad_out = (*out_->grad_)[0];
+
+        int n = target_->size();
+
+        for (int i {}; i < pred_->size(); ++i) {
+
+            (*pred_->grad_)[i] = grad_out * 2.0f * ((*pred_)[i] - (*target_)[i]) / n;
+        }
+    }
+}
+
+/*
+    In the CrossEntropy class for efficient
+    backward pass with softmax_cache_. For using cache 
+    without copying it i will use function from
+    <utility> "std::move()" which allowes me to 
+    give control of allocated memory to another 
+    variable. 
+
+*/
+
+CrossEntropyBackward::CrossEntropyBackward(
+    std::shared_ptr<Tensor> pred_,
+    std::shared_ptr<Tensor> target_,
+    std::shared_ptr<Tensor> out_,
+    std::vector<float> softmax_cache_
+) :
+    pred_(pred_),
+    target_(target_),
+    out_(out_),
+    softmax_cache_(std::move(softmax_cache_)){}
+
+
+void CrossEntropyBackward::apply() {
+    if (pred_->requires_grad_) {
+        if (!pred_->grad_) {
+            pred_->grad_ = std::make_shared<Tensor>(pred_->shape_);
+        }
+
+        int grad_out = (*out_->grad_)[0];
+
+        int batch_size = pred_->shape_[0];
+
+        int num_classes = pred_->shape_[1];
+
+        for (int i {}; i < batch_size; ++i) {
+            for (int j {}; j < num_classes; ++j) {
+                float p = softmax_cache_[pred_->strides_[1] * i + pred_->strides_[0] * j];
+
+                float grad = (*target_)[i] == j ? (p - 1.0f) : p;
+
+                (*pred_->grad_)[pred_->strides_[1] + pred_->strides_[0] * j] += (
+                    grad_out * grad / batch_size
+                );
+            }
+        } 
+    }
+}

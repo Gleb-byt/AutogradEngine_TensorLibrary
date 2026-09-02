@@ -14,6 +14,10 @@ private:
 
 public:
     virtual std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input);
+
+    virtual std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input,
+        std::shared_ptr<Tensor> output    
+    );
     
     std::shared_ptr<Tensor> operator()(std::shared_ptr<Tensor> input);
 
