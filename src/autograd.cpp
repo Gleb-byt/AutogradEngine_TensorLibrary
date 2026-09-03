@@ -252,7 +252,7 @@ void MSEBackward::apply() {
             pred_->grad_ = std::make_shared<Tensor> (pred_->shape_);
         }
 
-        int grad_out = (*out_->grad_)[0];
+        float grad_out = (*out_->grad_)[0];
 
         int n = target_->size();
 

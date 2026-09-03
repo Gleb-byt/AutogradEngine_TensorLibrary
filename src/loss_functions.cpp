@@ -35,8 +35,8 @@ std::shared_ptr<Tensor> MSELoss::forward(
 
     result->requires_grad_ = pred->requires_grad_;
     if (pred->requires_grad_) {
-        pred->grad_ = std::make_shared<Tensor>(pred->shape_);
-        pred->grad_fn_ = std::make_shared<BackwardFunction> (pred, target, result);
+        result->grad_ = std::make_shared<Tensor>(result->shape_);
+        result->grad_fn_ = std::make_shared<BackwardFunction> (pred, target, result);
     }
 
     return result;
@@ -74,7 +74,7 @@ std::shared_ptr<Tensor> CrossEntropyLoss::forward(
             sum_exp += e;
         }
 
-        for (int j {}; j < batch_size; ++j) {
+        for (int j {}; j < num_classes; ++j) {
             softmax_cache_[i * (*pred).strides_[0] + j * (*pred).strides_[1]] /= sum_exp;
 
         }
