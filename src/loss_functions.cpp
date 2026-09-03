@@ -70,7 +70,7 @@ std::shared_ptr<Tensor> CrossEntropyLoss::forward(
 
         for (int j {}; j < num_classes; ++j) {
             float e = std::exp((*pred)[i * num_classes + j] - max_val);
-            softmax_cache_[i * pred->strides_[0] + j * pred->strides_[1]];
+            softmax_cache_[i * pred->strides_[0] + j * pred->strides_[1]] = e;
             sum_exp += e;
         }
 

@@ -27,7 +27,7 @@ public:
 
     std::vector<std::pair<std::string, std::shared_ptr<Tensor>>> parameters() const;
 
-    std::unordered_map<std::string, std::shared_ptr<Tensor>> Module::state_dict() const;
+    std::unordered_map<std::string, std::shared_ptr<Tensor>> state_dict() const;
 
     void load_state_dict(std::unordered_map<std::string, std::shared_ptr<Tensor>> &state_dict);
 };

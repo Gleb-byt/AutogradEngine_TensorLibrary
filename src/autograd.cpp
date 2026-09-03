@@ -299,11 +299,11 @@ void CrossEntropyBackward::apply() {
 
         for (int i {}; i < batch_size; ++i) {
             for (int j {}; j < num_classes; ++j) {
-                float p = softmax_cache_[pred_->strides_[1] * i + pred_->strides_[0] * j];
+                float p = softmax_cache_[pred_->strides_[0] * i + pred_->strides_[1] * j];
 
                 float grad = (*target_)[i] == j ? (p - 1.0f) : p;
 
-                (*pred_->grad_)[pred_->strides_[1] + pred_->strides_[0] * j] += (
+                (*pred_->grad_)[pred_->strides_[0] + pred_->strides_[1] * j] += (
                     grad_out * grad / batch_size
                 );
             }

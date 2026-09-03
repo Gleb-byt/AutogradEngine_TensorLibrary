@@ -11,6 +11,10 @@ std::shared_ptr<Tensor> Module::forward(std::shared_ptr<Tensor> input) {
     throw std::runtime_error("Forward not implemented");
 }
 
+std::shared_ptr<Tensor> Module::forward(std::shared_ptr<Tensor> input , std::shared_ptr<Tensor> target) {
+    throw std::runtime_error("Forward method for loss function is not implemented");
+}
+
 std::shared_ptr<Tensor> Module::operator()(std::shared_ptr<Tensor> input) { return forward(input); }
 
 

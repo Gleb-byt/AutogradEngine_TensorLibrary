@@ -158,6 +158,8 @@ Tensor Tensor::matmul(const Tensor& other) const {
 
     }
 
+    return Tensor({0});
+
 }
 
 void Tensor::print() const {
