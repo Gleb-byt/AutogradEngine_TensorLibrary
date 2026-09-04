@@ -36,7 +36,7 @@ std::shared_ptr<Tensor> MSELoss::forward(
     result->requires_grad_ = pred->requires_grad_;
     if (pred->requires_grad_) {
         result->grad_ = std::make_shared<Tensor>(result->shape_);
-        result->grad_fn_ = std::make_shared<BackwardFunction> (pred, target, result);
+        result->grad_fn_ = std::make_shared<MSEBackward> (pred, target, result);
     }
 
     return result;
@@ -92,7 +92,7 @@ std::shared_ptr<Tensor> CrossEntropyLoss::forward(
 
     if (result->requires_grad_) {
         result->grad_ = std::make_shared<Tensor>(result->shape_);
-        result->grad_fn_ = std::make_shared<BackwardFunction>(pred, target, result, softmax_cache_);
+        result->grad_fn_ = std::make_shared<CrossEntropyBackward>(pred, target, result, softmax_cache_);
     }
 
     return result;

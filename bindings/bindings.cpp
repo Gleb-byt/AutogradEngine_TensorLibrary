@@ -9,8 +9,7 @@
 #include "../include/relu.hpp"
 #include "../include/tensor.hpp"
 
-
-using py = pybind11;
+namespace py = pybind11;
 
 PYBIND11_MODULE(autograd_engine, m) {
     m.doc() = "C++ autograd library based on Tensor operations";
@@ -28,8 +27,8 @@ PYBIND11_MODULE(autograd_engine, m) {
         py::arg("shape"),
         "Method used to create Tensor filled by default value"    
         ) 
-        .def(py::init<const std::vector<float> &, std::vector<int> & > ()
-        py::arg("data") py::arg("shape"),
+        .def(py::init<const std::vector<float> &, const std::vector<int> & > (),
+        py::arg("data"), py::arg("shape"),
         "Method used to create Tensor filled with input data"
         )
         .def("print", &Tensor::print);
