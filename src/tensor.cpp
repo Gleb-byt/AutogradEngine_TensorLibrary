@@ -18,6 +18,19 @@ Tensor::Tensor(const std::vector<float>& data, const std::vector<int>& shape):
         compute_strides();
     }
 
+
+Tensor::Tensor(const std::vector<int> &shape, bool requires_grad) {
+    this->requires_grad_ = requires_grad;
+    int total_size = 1;
+    for (int dim : shape) {
+        total_size *= dim;
+    }
+    data_ = std::make_shared<std::vector<float>>(total_size, 0.0f);
+    compute_strides();   
+
+}
+
+
 int Tensor::size() const {
     return data_->size();
     // or (*data_).size();
