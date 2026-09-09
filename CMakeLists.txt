@@ -36,9 +36,22 @@ add_library(autograd_lib
     include/relu.hpp
 )
 
+add_library(datasets_lib
+    src/data_processing/dataloader.cpp
+    src/data_processing/dataset.cpp
+
+    include/dataloader.hpp
+    include/dataset.hpp
+)
+
 
 
 target_include_directories(autograd_lib PUBLIC include)
+
+target_include_directories(datasets_lib PUBLIC include)
+
+
+target_link_libraries(datasets_lib PUBLIC autograd_lib)
 
 
 enable_testing()

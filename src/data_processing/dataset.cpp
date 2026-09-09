@@ -23,7 +23,7 @@ int reverse_int(int i) {
 float convert_to_float(unsigned char px) { return static_cast<float>(px) / 2;}
 
 std::vector<int> read_mnist_labels(std::string path) {
-    std::ifstream file(path);
+    std::ifstream file(path, std::ios::binary);
     std::vector<int> labels;
 
     if (file.is_open()) {
@@ -51,7 +51,7 @@ std::vector<int> read_mnist_labels(std::string path) {
 
 std::vector<std::vector<std::vector<float>>> read_mnist(std::string path) {
 
-    std::ifstream file(path);
+    std::ifstream file(path, std::ios::binary);
     std::vector<std::vector<std::vector<float>>> dataset;
 
     if (file.is_open()) {
@@ -131,4 +131,8 @@ void visualize_image(std::shared_ptr<Tensor> image) {
         }
         std::cout << std::endl;
     }
+}
+
+int FashionMNIST::get_length() {
+    return _images.size();
 }

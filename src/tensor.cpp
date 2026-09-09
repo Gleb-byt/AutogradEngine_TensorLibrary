@@ -19,6 +19,20 @@ Tensor::Tensor(const std::vector<float>& data, const std::vector<int>& shape):
     }
 
 
+Tensor::Tensor(const std::vector<std::vector<float>> & data) {
+    this->shape_ = {static_cast<int>(data.size()), static_cast<int>(data.front().size())};
+    std::vector<float> flatten_data ;
+    for (int i {}; i < this->shape_[0]; ++i) {
+        for (int j {}; j < this->shape_[1]; ++j) {
+            flatten_data.push_back(data[i][j]);
+        }
+    }
+    data_ = std::make_shared<std::vector<float>>(flatten_data);
+    compute_strides();
+}
+
+
+
 Tensor::Tensor(const std::vector<int> &shape, bool requires_grad) {
     this->requires_grad_ = requires_grad;
     int total_size = 1;
@@ -110,7 +124,7 @@ Tensor Tensor::matmul(const Tensor& other) const {
 
         int N = other.shape_[1];
 
-        Tensor result({N});
+        Tensor result(std::vector<int>{N});
 
         for (int i {}; i < N; ++i) {
             int sum {};
@@ -132,7 +146,7 @@ Tensor Tensor::matmul(const Tensor& other) const {
 
         int N = other.shape_[1];
 
-        Tensor result({N});
+        Tensor result(std::vector<int> {N});
 
         for (int i {}; i < N; ++i) {
             int sum {};
@@ -171,7 +185,7 @@ Tensor Tensor::matmul(const Tensor& other) const {
 
     }
 
-    return Tensor({0});
+    return Tensor(std::vector<int> {0});
 
 }
 
@@ -231,7 +245,7 @@ Tensor Tensor::dot(const Tensor& other) const {
         sum += (*data_)[i] * (*other.data_)[i];
     }
 
-    Tensor result({1});
+    Tensor result(std::vector<int> {1});
 
     result[0] = sum;
     return result;

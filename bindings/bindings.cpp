@@ -64,7 +64,7 @@ PYBIND11_MODULE(autograd_engine, m) {
         catch ( const std::string & error_message) {
             std::cout << error_message << std::endl;
         }
-        return Tensor({1});
+        return Tensor(std::vector<int> {1});
     }, py::arg("a"), py::arg("b"), 
     "Allows to multiply any Tensors no using inner methods"
     );
@@ -76,7 +76,7 @@ PYBIND11_MODULE(autograd_engine, m) {
         catch (const std::string & error_message) {
             std::cout << error_message << std::endl;
         }
-        return Tensor({1});
+        return Tensor(std::vector<int>{1});
     }, py::arg("a"), py::arg("b"),
     "Allows to add any Tensors no using inner mehtods");
 
@@ -88,7 +88,7 @@ PYBIND11_MODULE(autograd_engine, m) {
             std::cout << error_message << std::endl;
         }
 
-        return Tensor({1});
+        return Tensor(std::vector<int> {1});
     }, py::arg("a"), py::arg("b"), 
     "Allows to multiply Tensors (val on val) no using inner methods"
     );

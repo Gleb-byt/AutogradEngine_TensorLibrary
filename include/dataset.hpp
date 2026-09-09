@@ -52,3 +52,5 @@ public:
     std::string label_to_class(int label);
 
 };
+
+void visualize_image(std::shared_ptr<Tensor> image);

@@ -23,5 +23,14 @@ public:
         Iterator(DataLoader *dataloader, int index);
         void operator++();
         std::vector<std::pair<int, std::shared_ptr<Tensor>>> operator*();
+        bool operator!=(const Iterator &other);
     };
+
+    DataLoader::Iterator begin();
+    DataLoader::Iterator end();
+
+
+    size_t batch_size() const;
+    size_t n_samples() const;
+    size_t n_batches() const;
 };

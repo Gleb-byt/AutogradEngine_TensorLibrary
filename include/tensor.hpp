@@ -36,11 +36,13 @@ public:
 
     std::vector<int> shape_;
 
-    Tensor(const std::vector<int>& shape);
+    explicit Tensor(const std::vector<int>& shape);
 
     Tensor(const std::vector<float>& data, const std::vector<int>& shape);
 
     Tensor(const std::vector<int>& shape, bool requires_grad);
+
+    explicit Tensor(const std::vector<std::vector<float>> & data);
 
     void zero_grad();
 
