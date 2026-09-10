@@ -27,11 +27,22 @@ import typing as tp
 import build.bindings.autograd_engine as ae
 
 
-class model:
-    def __init__(self, input_dimensions: int, output_dimensions: int, seed: int = 42):
-        self.module1 = ae.Linear(input_dimensions, 512)
-        self.module2 = ae.Linear(512, 256)
-        self.module3 = ae.linear(256, 64)
-        self.module4 = ae.Linear(16, output_dimensions)
+class NeuralNetwork(ae.Module):
+    def __init__(self):
+        self._flatten = ae.Flatten()
+        self._linear1 = ae.Linear(28 * 28, 512)
+        self._linear2 = ae.Linear(512, 512)
+        self._linear3 = ae.Linear(512, 10)
+        self._relu = ae.Relu()
 
-    def make_pred(input_data: ae.Tensor): ...
+        self.register_module("linear_1", self._linear1)
+        self.register_module("linear_2", self._linear2)
+        self.register_module("linear_3", self._linear3)
+
+    def forward(self, input: ae.Tensor):
+        flat = self._flatten(input)
+        linear_1 = self._lienar1(flat)
+        relu_1 = self._relu(linear_1)
+        linear_2 = self._linear2(relu_1)
+        relu_2 = self._relu(linear_2)
+        return self._linear3(relu_2)

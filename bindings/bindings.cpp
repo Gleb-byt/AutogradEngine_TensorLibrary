@@ -140,4 +140,11 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def(py::init<std::string, std::string> ())
         .def("get_item", &MNIST::get_item, py::arg("index"))
         .def("label_to_class", &MNIST::label_to_class, py::arg("label"));
+
+    py::class_<Module, std::shared_ptr<Module>>(m, "Module")
+        .def("regiseter_parameter", &Module::register_parameter, py::arg("name"), py::arg("param"))
+        .def("register_module", &Module::register_module, py::arg("name"), py::arg("module"))
+        .def("parameters", &Module::parameters)
+        .def("state_dict", &Module::state_dict)
+        .def("load_state_dict", &Module::load_state_dict, py::arg("state_dict"));
 };
