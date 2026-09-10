@@ -1,6 +1,9 @@
 #include <pybind11/stl.h>
 #include <pybind11/pybind11.h>
 
+
+#include "../include/dataloader.hpp"
+#include "../include/dataset.hpp"
 #include "../include/autograd.hpp"
 #include "../include/flatten.hpp"
 #include "../include/linear.hpp"
@@ -127,5 +130,14 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def("forward", &CrossEntropyLoss::forward, py::arg("pred"), py::arg("target"))
         .def("__call__", &CrossEntropyLoss::forward, py::arg("pred"), py::arg("target"));
         
-    
+    py::class_<FashionMNIST, std::shared_ptr<FashionMNIST> (m, "FashionMNIST")
+        .def(py::init<std::string, std::string>())
+        .def("get_item", &FashionMNIST::get_item, py::arg("index"))
+        .def("label_to_class", &FashionMNIST::label_to_class, py::arg("label"));
+
+
+    py::class_<MNIST, std::shared_ptr<MNIST>(m, "MNIST")
+        .def(py::init<std::string, std::string> ())
+        .def("get_item", &MNIST::get_item, py::arg("index"))
+        .def("label_to_class", &MNIST::label_to_class, py::arg("label"));
 };

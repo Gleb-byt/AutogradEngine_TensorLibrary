@@ -3,10 +3,26 @@
 
 
 
+/*
+    Tests should be launched from 
+    the project directory, otherwise 
+    datasets path will be invalid
+*/
+
+/*
+    After launching tests you should be
+    able to recognize a dress or a T-shirt.
+    If it is true therefore everything works correct
+*/
+
+
+
+
 int main() {
 
-    MNIST mnist_train = 
-        MNIST("./data/train-images-idx3-ubyte", "./data/train-labels-idx1-ubyte");
+    FashionMNIST mnist_train = 
+        FashionMNIST("./data/FashionMnist/train-images-idx3-ubyte",
+             "./data/FashionMnist/train-labels-idx1-ubyte");
 
     std::cout << "Datasets succesfully loaded" << std::endl;
 
@@ -26,15 +42,3 @@ int main() {
 
     return 0;
 }
-
-/*
-    Tests should be launched from 
-    the project directory, otherwise 
-    datasets path will be invalid
-*/
-
-/*
-    After launching tests you should be
-    able to recognize a dress or a T-shirt.
-    If it is true therefore everything works correct
-*/
