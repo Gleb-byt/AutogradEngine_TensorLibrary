@@ -98,7 +98,7 @@ PYBIND11_MODULE(autograd_engine, m) {
 
 
 
-    py::class_<Linear, std::shared_ptr<Linear>> (m, "Linear")
+    py::class_<Linear,Module, std::shared_ptr<Linear>> (m, "Linear")
         .def(py::init<int , int, int> (),
             py::arg("in_features"), py::arg("out_features"), py::arg("seed"),
             "This method is used to create Linear layer with input size of Tensor and output"
@@ -109,23 +109,23 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def("reset_parameters", &Linear::reset_parameters);
 
 
-    py::class_<Relu, std::shared_ptr<Relu>> (m, "Relu")
+    py::class_<Relu,Module, std::shared_ptr<Relu>> (m, "Relu")
         .def(py::init<> ())
         .def("forward", &Relu::forward, py::arg("input"))
         .def("__call__", &Relu::forward, py::arg("input"));
 
-    py::class_<Flatten, std::shared_ptr<Flatten>> (m, "Flatten")
+    py::class_<Flatten,Module, std::shared_ptr<Flatten>> (m, "Flatten")
         .def(py::init<>())
         .def("forward", &Flatten::forward, py::arg("input"))
-        .def("__cal__", &Flatten::forward, py::arg("input"));
+        .def("__call__", &Flatten::forward, py::arg("input"));
 
-    py::class_<MSELoss, std::shared_ptr<MSELoss>> (m, "MSELoss")
+    py::class_<MSELoss, Module, std::shared_ptr<MSELoss>> (m, "MSELoss")
         .def(py::init<>())
         .def("forward", &MSELoss::forward, py::arg("pred"), py::arg("target"))
         .def("__call__", &MSELoss::forward, py::arg("pred"), py::arg("target"));
 
         
-    py::class_<CrossEntropyLoss, std::shared_ptr<CrossEntropyLoss>> (m, "CrossEntropyLoss")
+    py::class_<CrossEntropyLoss,Module, std::shared_ptr<CrossEntropyLoss>> (m, "CrossEntropyLoss")
         .def(py::init<>())
         .def("forward", &CrossEntropyLoss::forward, py::arg("pred"), py::arg("target"))
         .def("__call__", &CrossEntropyLoss::forward, py::arg("pred"), py::arg("target"));
@@ -140,6 +140,11 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def(py::init<std::string, std::string> ())
         .def("get_item", &MNIST::get_item, py::arg("index"))
         .def("label_to_class", &MNIST::label_to_class, py::arg("label"));
+
+    py::class_<DataLoader, std::shared_ptr<DataLoader> (m, "DataLoader")
+        .def(py::init<Dataset *, int, bool> (), py::arg("dataset"), py::arg("batch_size"), py::arg("shuffle"));
+
+
 
     py::class_<Module, std::shared_ptr<Module>>(m, "Module")
         .def("regiseter_parameter", &Module::register_parameter, py::arg("name"), py::arg("param"))
