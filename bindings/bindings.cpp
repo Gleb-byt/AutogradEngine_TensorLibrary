@@ -11,6 +11,7 @@
 #include "../include/module.hpp"
 #include "../include/relu.hpp"
 #include "../include/tensor.hpp"
+#include "../include/optimizer.hpp"
 
 namespace py = pybind11;
 
@@ -130,18 +131,18 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def("forward", &CrossEntropyLoss::forward, py::arg("pred"), py::arg("target"))
         .def("__call__", &CrossEntropyLoss::forward, py::arg("pred"), py::arg("target"));
         
-    py::class_<FashionMNIST, std::shared_ptr<FashionMNIST> (m, "FashionMNIST")
+    py::class_<FashionMNIST, std::shared_ptr<FashionMNIST>> (m, "FashionMNIST")
         .def(py::init<std::string, std::string>())
         .def("get_item", &FashionMNIST::get_item, py::arg("index"))
         .def("label_to_class", &FashionMNIST::label_to_class, py::arg("label"));
 
 
-    py::class_<MNIST, std::shared_ptr<MNIST>(m, "MNIST")
+    py::class_<MNIST, std::shared_ptr<MNIST>> (m, "MNIST")
         .def(py::init<std::string, std::string> ())
         .def("get_item", &MNIST::get_item, py::arg("index"))
         .def("label_to_class", &MNIST::label_to_class, py::arg("label"));
 
-    py::class_<DataLoader, std::shared_ptr<DataLoader> (m, "DataLoader")
+    py::class_<DataLoader, std::shared_ptr<DataLoader>> (m, "DataLoader")
         .def(py::init<Dataset *, int, bool> (), py::arg("dataset"), py::arg("batch_size"), py::arg("shuffle"));
 
 
@@ -152,4 +153,16 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def("parameters", &Module::parameters)
         .def("state_dict", &Module::state_dict)
         .def("load_state_dict", &Module::load_state_dict, py::arg("state_dict"));
+
+    py::class_<Optimizer, std::shared_ptr<Optimizer>>(m, "Optimizer")
+        .def("step", & Optimizer::step, "Makes a learning step")
+        .def("zero_grad", & Optimizer::zero_grad, "Zero all parameters of gradients");
+
+    py::class_<SGD, Optimizer, std::shared_ptr<SGD>> (m, "SGD")
+        .def(py::init<std::vector<std::shared_ptr<Tensor>>, float , float> (), 
+            py::arg("parameters"),
+            py::arg("lr"),
+            py::arg("momentum") = 0.0f,
+            "Stochastic Gradient Descent"
+        );
 };

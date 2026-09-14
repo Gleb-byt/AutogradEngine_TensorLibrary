@@ -26,6 +26,7 @@ add_library(autograd_lib
     src/loss_functions.cpp
     src/module.cpp
     src/relu.cpp
+    src/optimizer.cpp
     
     include/tensor.hpp
     include/autograd.hpp
@@ -34,6 +35,7 @@ add_library(autograd_lib
     include/loss_functions.hpp
     include/module.hpp
     include/relu.hpp
+    include/optimizer.hpp
 )
 
 add_library(datasets_lib
