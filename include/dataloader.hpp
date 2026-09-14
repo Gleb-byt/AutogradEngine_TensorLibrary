@@ -22,6 +22,8 @@ public:
     public:
         Iterator(DataLoader *dataloader, int index);
         void operator++();
+        bool operator==(const Iterator & other) const;
+        bool operator!=(const Iterator & other) const;
         std::vector<std::pair<int, std::shared_ptr<Tensor>>> operator*();
         bool operator!=(const Iterator &other);
     };

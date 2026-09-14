@@ -20,9 +20,9 @@
 
 int main() {
 
-    FashionMNIST mnist_train = 
-        FashionMNIST("./data/FashionMnist/train-images-idx3-ubyte",
-             "./data/FashionMnist/train-labels-idx1-ubyte");
+    MNIST mnist_train = 
+        MNIST("./data/Mnist/train-images-idx3-ubyte",
+             "./data/Mnist/train-labels-idx1-ubyte");
 
     std::cout << "Datasets succesfully loaded" << std::endl;
 

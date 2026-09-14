@@ -29,6 +29,7 @@ import build.bindings.autograd_engine as ae
 
 class NeuralNetwork(ae.Module):
     def __init__(self):
+        super().__init__()
         self._flatten = ae.Flatten()
         self._linear1 = ae.Linear(28 * 28, 512, 42)
         self._linear2 = ae.Linear(512, 512, 42)

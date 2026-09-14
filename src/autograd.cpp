@@ -134,7 +134,7 @@ std::shared_ptr<Tensor> matmul(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor
         result -> grad_ = std::make_shared<Tensor>(result->shape_);
         result->grad_fn_ = std::make_shared<MatMulBackward>(a,b,result);
     }
-
+    return result;
 }
 
 
@@ -303,7 +303,7 @@ void CrossEntropyBackward::apply() {
 
                 float grad = (*target_)[i] == j ? (p - 1.0f) : p;
 
-                (*pred_->grad_)[pred_->strides_[0] + pred_->strides_[1] * j] += (
+                (*pred_->grad_)[pred_->strides_[0] * i + pred_->strides_[1] * j] += (
                     grad_out * grad / batch_size
                 );
             }

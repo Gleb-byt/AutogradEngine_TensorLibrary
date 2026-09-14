@@ -42,6 +42,14 @@ DataLoader::Iterator DataLoader::end() {
     return Iterator(this, _dataset->get_length());
 }
 
+bool DataLoader::Iterator::operator==(const Iterator & other) const {
+    return this->_index == other._index;
+}
+
+bool DataLoader::Iterator::operator!=(const Iterator & other) const {
+    return !(*this == other);
+}
+
 std::size_t DataLoader::batch_size() const {
     return _batch_size; 
 }

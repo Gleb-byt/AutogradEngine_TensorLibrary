@@ -40,6 +40,9 @@ PYBIND11_MODULE(autograd_engine, m) {
             "Method used to create Tensor filled with default values, which requires grad"
         
         )
+        .def("reshape", & Tensor::reshape, py::arg("shape"),
+        "Allows to change shape of the Tensor"
+        )
         .def("backward", &Tensor::backward)
 
         .def("zero_grad", & Tensor::zero_grad)
@@ -48,7 +51,7 @@ PYBIND11_MODULE(autograd_engine, m) {
 
         .def_readwrite("requires_grad", & Tensor::requires_grad_)
 
-        .def_readonly("shape", & Tensor::shape_)
+        .def_readwrite("shape", & Tensor::shape_)
 
         .def("get_data", [] (const Tensor & t) -> std::vector<float> {
             return *(t.data_);
@@ -97,6 +100,15 @@ PYBIND11_MODULE(autograd_engine, m) {
     "Allows to multiply Tensors (val on val) no using inner methods"
     );
 
+    
+    py::class_<Module, std::shared_ptr<Module>>(m, "Module")
+        .def(py::init<> ())
+        .def("regiseter_parameter", &Module::register_parameter, py::arg("name"), py::arg("param"))
+        .def("register_module", &Module::register_module, py::arg("name"), py::arg("module"))
+        .def("parameters", &Module::parameters)
+        .def("state_dict", &Module::state_dict)
+        .def("load_state_dict", &Module::load_state_dict, py::arg("state_dict"));
+    
 
 
     py::class_<Linear,Module, std::shared_ptr<Linear>> (m, "Linear")
@@ -136,23 +148,34 @@ PYBIND11_MODULE(autograd_engine, m) {
         .def("get_item", &FashionMNIST::get_item, py::arg("index"))
         .def("label_to_class", &FashionMNIST::label_to_class, py::arg("label"));
 
+    py::class_<Dataset, std::shared_ptr<Dataset>> (m, "Dataset");
 
-    py::class_<MNIST, std::shared_ptr<MNIST>> (m, "MNIST")
+
+    py::class_<MNIST,Dataset, std::shared_ptr<MNIST>> (m, "MNIST")
         .def(py::init<std::string, std::string> ())
         .def("get_item", &MNIST::get_item, py::arg("index"))
         .def("label_to_class", &MNIST::label_to_class, py::arg("label"));
 
     py::class_<DataLoader, std::shared_ptr<DataLoader>> (m, "DataLoader")
-        .def(py::init<Dataset *, int, bool> (), py::arg("dataset"), py::arg("batch_size"), py::arg("shuffle"));
+        .def(py::init<Dataset *, int, bool> (), py::arg("dataset"), py::arg("batch_size"), py::arg("shuffle"),
+        py::keep_alive<1, 2>()    
+        )
+        .def(
+            "__iter__", [] (DataLoader & dl) {
+                return py::make_iterator(dl.begin(), dl.end());
+            }, py::keep_alive<0, 1>()
+        )
+        .def(
+            "__len__", &DataLoader::n_batches
+        )
+        .def(
+            "batch_size", &DataLoader::batch_size
+        )
+        .def(
+            "n_samples", &DataLoader::n_samples
+        );
 
 
-
-    py::class_<Module, std::shared_ptr<Module>>(m, "Module")
-        .def("regiseter_parameter", &Module::register_parameter, py::arg("name"), py::arg("param"))
-        .def("register_module", &Module::register_module, py::arg("name"), py::arg("module"))
-        .def("parameters", &Module::parameters)
-        .def("state_dict", &Module::state_dict)
-        .def("load_state_dict", &Module::load_state_dict, py::arg("state_dict"));
 
     py::class_<Optimizer, std::shared_ptr<Optimizer>>(m, "Optimizer")
         .def("step", & Optimizer::step, "Makes a learning step")

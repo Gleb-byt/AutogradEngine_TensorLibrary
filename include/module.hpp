@@ -1,4 +1,5 @@
 #pragma once
+
 #include "tensor.hpp"
 #include <memory>
 #include <string>
@@ -13,6 +14,8 @@ private:
     std::vector<std::pair<std::string, std::shared_ptr<Module>>> _modules;
 
 public:
+    Module() = default;
+
     virtual std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input);
 
     virtual std::shared_ptr<Tensor> forward(std::shared_ptr<Tensor> input,

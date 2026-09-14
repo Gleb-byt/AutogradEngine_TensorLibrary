@@ -67,7 +67,7 @@ void SGD::step() {
             for (size_t i {}; i < n; ++i) {
                 v[i] = _momentum * v[i] + grad_data[i];
 
-                param_data[i] = grad_data[i] - _lr * v[i];
+                param_data[i] -= _lr * v[i];
             }
 
         } else {

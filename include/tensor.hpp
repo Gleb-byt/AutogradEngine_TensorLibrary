@@ -71,6 +71,8 @@ public:
 
     Tensor dot(const Tensor& other) const;
 
+    Tensor reshape(const std::vector<int> & shape);
+
 
     void print() const;
 
