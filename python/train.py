@@ -25,6 +25,8 @@ def train_new_mnist_model():
 
     test_dataloader: ae.DataLoader = ae.DataLoader(mnist_test, batch_size, False)
 
+    total_batch_amount: int = len(train_dataloader)
+
     print("dataloader initialized")
 
     model: ae.Module = nn.NeuralNetwork()
@@ -40,28 +42,29 @@ def train_new_mnist_model():
 
     print("hyper parameters")
 
-    for epoch in range(5):
+    for epoch in range(3):
 
         total_loss = 0
         batch_am = 0
         for batch in train_dataloader:
-            batch_am += batch_size
+            batch_am += 1
             for target_label, img_tensor in batch:
                 target_tensor = ae.Tensor([float(target_label)], [1])
 
                 pred = model.forward(img_tensor).reshape([1, 10])
 
-                loss = loss_fn.forward(pred, target_tensor)
+                loss: ae.Tensor = loss_fn.forward(pred, target_tensor)
 
                 total_loss += loss.get_data()[0]
 
-                optimizer.zero_grad()
-
                 loss.backward()
 
-                optimizer.step()
+            optimizer.step()
+            optimizer.zero_grad()
 
-            print(f"Loss = {loss.get_data()[0]}, {batch_am}")
+            ae.save(model.state_dict(), "models/mnist_model.bin")
+
+            print(f"Loss = {loss.get_data()[0]}; batch {batch_am} / {total_batch_amount}")  # type: ignore
 
         print(
             f"Epoch {epoch + 1}/{n_epochs}, Loss = {total_loss / train_dataloader.n_samples()}"

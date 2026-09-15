@@ -2,6 +2,16 @@
 #include <vector>
 #include <memory>
 #include "tensor.hpp"
+#include <unordered_set>
+#include <ctime>
+#include <cstdlib>
+#include <algorithm>
+
+void build_topo(
+    const std::shared_ptr<Tensor>& v,
+    std::vector<std::shared_ptr<BackwardFunction>>& topo,
+    std::unordered_set<BackwardFunction*>& visited
+);
 
 class BackwardFunction {
 public:

@@ -27,6 +27,7 @@ add_library(autograd_lib
     src/module.cpp
     src/relu.cpp
     src/optimizer.cpp
+    src/serialization.cpp
     
     include/tensor.hpp
     include/autograd.hpp
@@ -36,6 +37,7 @@ add_library(autograd_lib
     include/module.hpp
     include/relu.hpp
     include/optimizer.hpp
+    include/serialization.hpp
 )
 
 add_library(datasets_lib

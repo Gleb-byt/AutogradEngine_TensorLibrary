@@ -1,5 +1,8 @@
 #include "../include/tensor.hpp"
 #include "../include/autograd.hpp"
+#include <unordered_set>
+#include <ctime>
+#include <cstdlib>
 
 
 Tensor::Tensor(const std::vector<int>&shape) : shape_(shape) {
@@ -258,4 +261,46 @@ Tensor Tensor::reshape(const std::vector<int> & shape) {
     res.shape_ = shape;
     res.compute_strides();
     return res;
+}
+
+/*
+    static in that position is used to show that this function is
+    used only in this file and can't be used from any other place
+*/  
+
+/*
+    visited set saves simple pointers not std::shared_ptr<T>
+    so if it saves simple pointers to memory it doesn't need the
+    structure with two pointers and smart logic
+*/
+
+void Tensor::backward() {
+    
+    std::srand(std::time(nullptr));
+
+    if (!grad_) {
+        grad_ = std::make_shared<Tensor>(shape_);
+    }
+    for (int i = 0; i < size(); ++i) {
+        float val = static_cast<float>(std::rand()) / RAND_MAX;
+        val = val == 0.0f ? 1e-7 : val;
+        (*grad_)[i] = val;
+    }
+
+    std::vector<std::shared_ptr<BackwardFunction>> topo;
+    std::unordered_set<BackwardFunction*> visited;
+
+    build_topo(shared_from_this(), topo, visited);
+
+    for (auto it = topo.rbegin(); it != topo.rend(); ++it) {
+        (*it)->apply();
+    }
+}
+
+void Tensor::zero_grad() {
+    if (grad_) {
+        for (int i {}; i < size(); ++i) {
+            (*grad_)[i] = 0.0f;
+        }
+    }
 }

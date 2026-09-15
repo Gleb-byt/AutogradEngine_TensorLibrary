@@ -149,7 +149,7 @@ std::shared_ptr<Tensor> matmul(std::shared_ptr<Tensor> a, std::shared_ptr<Tensor
     structure with two pointers and smart logic
 */
 
-static void build_topo(
+void build_topo(
     const std::shared_ptr<Tensor>& v,
     std::vector<std::shared_ptr<BackwardFunction>>& topo,
     std::unordered_set<BackwardFunction*>& visited
@@ -168,36 +168,7 @@ static void build_topo(
     }
 }
 
-void Tensor::backward() {
-    
-    std::srand(std::time(NULL));
 
-    if (!grad_) {
-        grad_ = std::make_shared<Tensor>(shape_);
-    }
-    for (int i = 0; i < size(); ++i) {
-        float val = static_cast<float>(std::rand()) / RAND_MAX;
-        val = val == 0.0f ? 1e-7 : val;
-        (*grad_)[i] = val;
-    }
-
-    std::vector<std::shared_ptr<BackwardFunction>> topo;
-    std::unordered_set<BackwardFunction*> visited;
-
-    build_topo(shared_from_this(), topo, visited);
-
-    for (auto it = topo.rbegin(); it != topo.rend(); ++it) {
-        (*it)->apply();
-    }
-}
-
-void Tensor::zero_grad() {
-    if (grad_) {
-        for (int i {}; i < size(); ++i) {
-            (*grad_)[i] = 0.0f;
-        }
-    }
-}
 
 
 FlattenBackward::FlattenBackward(std::shared_ptr<Tensor> input, std::shared_ptr<Tensor> output) {
@@ -291,7 +262,7 @@ void CrossEntropyBackward::apply() {
             pred_->grad_ = std::make_shared<Tensor>(pred_->shape_);
         }
 
-        int grad_out = (*out_->grad_)[0];
+        float grad_out = (*out_->grad_)[0];
 
         int batch_size = pred_->shape_[0];
 

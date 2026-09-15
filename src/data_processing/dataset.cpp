@@ -20,7 +20,8 @@ int reverse_int(int i) {
 }
 
 
-float convert_to_float(unsigned char px) { return static_cast<float>(px) / 2;}
+float convert_to_float(unsigned char px) 
+    { return static_cast<float>(px) / 255.0f;}
 
 std::vector<int> read_mnist_labels(std::string path) {
     std::ifstream file(path, std::ios::binary);

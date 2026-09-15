@@ -12,6 +12,7 @@
 #include "../include/relu.hpp"
 #include "../include/tensor.hpp"
 #include "../include/optimizer.hpp"
+#include "../include/serialization.hpp"
 
 namespace py = pybind11;
 
@@ -188,4 +189,14 @@ PYBIND11_MODULE(autograd_engine, m) {
             py::arg("momentum") = 0.0f,
             "Stochastic Gradient Descent"
         );
+
+    m.def(
+        "save", &save, py::arg("state_dict"), py::arg("filename"),
+        "Allows to save final version of model"
+    );
+
+    m.def(
+        "load", &load, py::arg("filename"),
+        "Allows to load saved version of model"
+    );
 };
