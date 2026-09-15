@@ -13,12 +13,20 @@ ___
 To that part tensor.cpp belongs for the most part
 
 The next math i used to implement all of the methods:
-* Matrix Multiplication (Matmul):Given two matrices $A \in \mathbb{R}^{m \times n}$ and $B \in \mathbb{R}^{n \times p}$, their product $C = A \cdot B \in \mathbb{R}^{m \times p}$ is calculated as: $$ \begin{pmatrix}    a_{1,1} & a_{1,2} & \dots & a_{1,n} \\    \vdots & \vdots & \ddots & \vdots \\    a_{m,1} & a_{m,2} & \dots & a_{m,n}    \end{pmatrix}    \cdot    \begin{pmatrix}    b_{1,1} & b_{1,2} & \dots & b_{1,p} \\    \vdots & \vdots & \ddots & \vdots \\    b_{n,1} & b_{n,2} & \dots & b_{n,p}    \end{pmatrix}    =    \begin{pmatrix}    c_{1,1} & \dots & c_{1,p} \\    \vdots & \ddots & \vdots \\    c_{m,1} & \dots & c_{m,p}    \end{pmatrix}$$Where each individual element $c_{i,j}$ is defined by the dot product: $$ c_{i,j} = \sum_{r=1}^{n} a_{i,r} \cdot b_{r,j} $$
+* Matrix Multiplication (Matmul): Given two matrices $A \in \mathbb{R}^{m \times n}$ and $B \in \mathbb{R}^{n \times p}$, their product $C = A \cdot B \in \mathbb{R}^{m \times p}$ is calculated as:
+
+<img width="480" height="90" alt="image" src="https://github.com/user-attachments/assets/e098e6c3-b938-40b5-946c-13f52f76bc61" />
+
+
+
+* **Element-wise Addition (and Broadcasting):** For two tensors $A$ and $B$ of matching dimensions ($m \times n$), the sum $C = A + B$ is computed element-by-element:
+
+  $$c_{i,j} = a_{i,j} + b_{i,j}$$
 * Element-wise Addition (and Broadcasting):For two tensors $A$ and $B$ of matching dimensions $(m \times n)$, the sum $C = A + B$ is computed element-by-element:$$c_{i,j} = a_{i,j} + b_{i,j}$$
 * Hadamard Product (Element-wise Multiplication):For tensors $A, B \in \mathbb{R}^{m \times n}$, element-wise multiplication $C = A \odot B$ is defined as:$$c_{i,j} = a_{i,j} \cdot b_{i,j}$$
 * Scalar Multiplication:Multiplying a tensor $A \in \mathbb{R}^{m \times n}$ by a scalar $\alpha \in \mathbb{R}$:$$c_{i,j} = \alpha \cdot a_{i,j}$$
 
-[!CAUTION]
+
 > Operations of matrix multiplication work, no matter is the order of their dimensions is correct.
 
 
