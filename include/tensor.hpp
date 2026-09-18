@@ -8,6 +8,12 @@
 
 class BackwardFunction;
 
+enum class Device {
+    CPU,
+    CUDA
+};
+
+
 /*
     Importing "std::enable_shared_from_this" is needed to call
     such pointers in the function std::shared_ptr<Tensor>(this).
@@ -81,4 +87,26 @@ public:
 
 
 
+};
+
+struct Storage {
+    float * ptr = nullptr;
+    size_t size = 0;
+    Device device = Device::CPU;
+
+    Storage(size_t n, Device dev) : size(n), device(dev) {
+        if (device == Device::CPU) {
+            float * ptr = (float *)malloc(n * sizeof(float));
+        } else {
+            cudaMalloc(& ptr, n * sizeof(float));
+        }
+    }
+
+    ~Storage() {
+        if (device == Device::CPU) {
+            free(ptr);
+        } else {
+            cudaFree(ptr);
+        }
+    }
 };
