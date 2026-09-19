@@ -29,3 +29,24 @@ TEST(TensorTest, Matmul) {
     EXPECT_EQ(c[3], 50);
 
 }
+
+
+TEST(TensorThrows, MatmulIncompatibleShapes) {
+    Tensor a({1, 2, 3, 4}, {1, 4});
+    Tensor b({1, 2, 3, 4}, {2, 2});
+
+    EXPECT_THROW(a.matmul(b), std::invalid_argument);
+
+    Tensor a({1,2,3,4,5,6}, {1,2,3});
+    Tensor b({7,8,9,10,11,12}, {3,2,1});
+
+    EXPECT_THROW(a.matmul(b), std::invalid_argument);
+
+    Tensor a({1,2,3,4}, {4});
+    Tensor b({1,2}, {2});
+
+    EXPECT_THROW(a.matmul(b), std::invalid_argument);
+
+
+}
+
